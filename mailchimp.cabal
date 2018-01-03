@@ -32,6 +32,7 @@ library
         Web.MailChimp.List
         Web.MailChimp.List.Member
         Web.MailChimp.Tutorial
+        Web.MailChimp.Campaign.Campaign
     build-depends:
         aeson -any,
         attoparsec -any,

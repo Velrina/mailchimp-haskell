@@ -1,11 +1,11 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE DataKinds             #-}
+{-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RecordWildCards       #-}
+{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE TypeOperators         #-}
 
 ----------------------------------------------------------------------
 -- |
@@ -29,29 +29,16 @@ module Web.MailChimp.List.Member
   )
   where
 
--- aeson
-import Data.Aeson
-import qualified Data.Aeson as Aeson
+import           Data.Aeson
+import qualified Data.Aeson             as Aeson
+import           Data.Text              (Text)
+import           Generics.SOP
+import           GHC.Generics
+import           Servant.API
+import           Servant.Client
+import           Servant.Client.Generic
 
--- base
-import GHC.Generics
-
--- generics-sop
-import Generics.SOP
-
--- mailchimp
-import Web.MailChimp.Common
-
--- servant
-import Servant.API
-
--- servant-client
-import Servant.Client
-import Servant.Client.Generic
-
--- text
-import Data.Text (Text)
-
+import           Web.MailChimp.Common
 
 type ListMemberId =
   Id
@@ -191,9 +178,9 @@ instance (Client ListMemberApi ~ client) => ClientLike client ListMemberClient
 data ListMemberRequest =
   ListMemberRequest
     { listMemberEmailAddress :: Text
-    , listMemberMergeFields :: [(Text, Text)]
-    , listMemberStatus :: ListMemberStatus
-    , listMemberExtra :: [(Text, Aeson.Value)]
+    , listMemberMergeFields  :: [(Text, Text)]
+    , listMemberStatus       :: ListMemberStatus
+    , listMemberExtra        :: [(Text, Aeson.Value)]
     }
   deriving (Show)
 
@@ -239,8 +226,8 @@ instance ToJSON ListMemberRequest where
 
 data ListMemberResponse =
   ListMemberResponse
-    { listMemberId :: ListMemberId
-    , listMemberResponseEmail :: Text
+    { listMemberId             :: ListMemberId
+    , listMemberResponseEmail  :: Text
     , listMemberResponseStatus :: ListMemberStatus
     }
   deriving (Show)
@@ -264,7 +251,7 @@ instance FromJSON ListMemberResponse where
 --
 --
 
-data ListMembersResponse =
+newtype ListMembersResponse =
   ListMembersResponse
     { listMembersMembers :: [ListMemberResponse]
     }
@@ -299,9 +286,9 @@ data ListMemberStatus
 --
 
 instance ToJSON ListMemberStatus where
-  toJSON Cleaned = "cleaned"
-  toJSON Pending = "pending"
-  toJSON Subscribed = "subscribed"
+  toJSON Cleaned      = "cleaned"
+  toJSON Pending      = "pending"
+  toJSON Subscribed   = "subscribed"
   toJSON Unsubscribed = "unsubscribed"
 
 instance FromJSON ListMemberStatus where
